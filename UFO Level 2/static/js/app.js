@@ -23,53 +23,33 @@ console.log(uniqueCountry);
 var uniqueState = [... new Set(tableData.map(ufo => ufo.state))].sort();
 console.log(uniqueState);
 
-var uniqueShape = [... new Set(tableData.map(ufo => ufo.shape))].sort();
-console.log(uniqueShape);
-
-// Dynamically add unique countries, states and shapes to corresponding dropdown menus
+// add unique countries and states to corresponding dropdown menus
 uniqueCountry.forEach((country) => {
 	d3.select("#country").append("option").text(country);
 })
-
 uniqueState.forEach((state) => {
 	d3.select("#state").append("option").text(state);
 })
 
-uniqueShape.forEach((shape) => {
-	d3.select("#shape").append("option").text(shape);
-})
-
 // Select and Create event handlers for the form's inputs and dropdown selections
 d3.selectAll(".form-control").on("change", updateFilters);
-
 // Select and Create event handlers for the button Clear Filter
 d3.select("#filter-btn").on("click", clear);
-
 // Create filter object to keep track of all filters
 var multifilters = {};
-
 // Create a function to dynamically add a filter value each time user add any filter
 function updateFilters() {
-
-  // Save the element, value, and id of the filter that was changed
-	// In an event, "this" refers to the html element that received the event.
   var inputElement = d3.select(this);
   var filterId = inputElement.attr("id");
   var inputValue = inputElement.property("value").toLowerCase();
-
-  // If a filter value was entered then add that filterId and value
-  // to the filters array. Otherwise, clear that filter from the filters object.
   if (inputValue) {
 	  multifilters[filterId] = inputValue;
   }
   else {
     delete multifilters[filterId];
   }
-
-  // Call function to apply all filters and rebuild the table
   filterTable();
 }
-
 function filterTable() {
 
   // Prevent the page from refreshing
